@@ -1,6 +1,6 @@
-# LeetCode Import Pipeline
+# LeetCode-CN Import Pipeline
 
-[![CI](https://github.com/lupanpan1030/leetcode-import-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/lupanpan1030/leetcode-import-pipeline/actions/workflows/ci.yml)
+[![CI](https://github.com/lupanpan1030/leetcode-cn-import-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/lupanpan1030/leetcode-cn-import-pipeline/actions/workflows/ci.yml)
 
 Standalone TypeScript pipeline for turning local LeetCode-CN `originData` JSON files into deterministic normalized JSON artifacts.
 

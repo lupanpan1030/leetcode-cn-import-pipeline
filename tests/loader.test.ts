@@ -33,7 +33,7 @@ function questionPayload(overrides: Record<string, unknown> = {}) {
 
 async function createTempSource(files: Record<string, string>): Promise<string> {
   const sourcePath = await fs.mkdtemp(
-    path.join(os.tmpdir(), "leetcode-import-pipeline-")
+    path.join(os.tmpdir(), "leetcode-cn-import-pipeline-")
   );
 
   await Promise.all(

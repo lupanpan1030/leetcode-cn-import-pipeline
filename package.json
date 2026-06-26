@@ -1,11 +1,11 @@
 {
-  "name": "leetcode-import-pipeline",
+  "name": "leetcode-cn-import-pipeline",
   "version": "0.1.0",
   "description": "Standalone LeetCode-CN import pipeline that emits normalized JSON data and reports.",
   "type": "module",
   "private": true,
   "bin": {
-    "leetcode-import-pipeline": "./dist/cli.js"
+    "leetcode-cn-import-pipeline": "./dist/cli.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",

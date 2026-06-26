@@ -36,7 +36,7 @@ describe("cli", () => {
 
   it("writes problems.json and report.json", async () => {
     const outDir = await fs.mkdtemp(
-      path.join(os.tmpdir(), "leetcode-import-pipeline-cli-")
+      path.join(os.tmpdir(), "leetcode-cn-import-pipeline-cli-")
     );
     const logs: string[] = [];
 
@@ -63,7 +63,7 @@ describe("cli", () => {
 
   it("supports dry-run without writing output files", async () => {
     const parentDir = await fs.mkdtemp(
-      path.join(os.tmpdir(), "leetcode-import-pipeline-dry-run-")
+      path.join(os.tmpdir(), "leetcode-cn-import-pipeline-dry-run-")
     );
     const outDir = path.join(parentDir, "out");
     const logs: string[] = [];
