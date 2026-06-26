@@ -1,0 +1,48 @@
+{
+  "data": {
+    "question": {
+      "title": "Two Sum",
+      "translatedTitle": "两数之和",
+      "titleSlug": "two-sum",
+      "content": "<p>Given an array of integers <code>nums</code> and an integer <code>target</code>, return indices of the two numbers such that they add up to <code>target</code>.</p>",
+      "translatedContent": "<p>给定一个整数数组 <code>nums</code> 和一个整数目标值 <code>target</code>，请你在该数组中找出和为目标值的那两个整数，并返回它们的数组下标。</p>",
+      "difficulty": "Easy",
+      "questionFrontendId": "1",
+      "sampleTestCase": "[2,7,11,15]\n9",
+      "topicTags": [
+        {
+          "name": "Array",
+          "slug": "array",
+          "translatedName": "数组"
+        },
+        {
+          "name": "Hash Table",
+          "slug": "hash-table",
+          "translatedName": "哈希表"
+        },
+        {
+          "name": "Array",
+          "slug": "array",
+          "translatedName": "数组"
+        }
+      ],
+      "codeSnippets": [
+        {
+          "lang": "JavaScript",
+          "langSlug": "javascript",
+          "code": "function twoSum(nums, target) {\n  \n}"
+        },
+        {
+          "lang": "Python3",
+          "langSlug": "python3",
+          "code": "class Solution:\n    def twoSum(self, nums, target):\n        pass"
+        },
+        {
+          "lang": "JavaScript",
+          "langSlug": "javascript",
+          "code": "function duplicateTemplate() {}"
+        }
+      ]
+    }
+  }
+}

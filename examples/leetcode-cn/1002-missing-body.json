@@ -1,0 +1,15 @@
+{
+  "data": {
+    "question": {
+      "title": "Valid Title Without Body",
+      "translatedTitle": "没有正文的有效标题",
+      "titleSlug": "valid-title-without-body",
+      "content": " ",
+      "translatedContent": null,
+      "difficulty": "Hard",
+      "questionFrontendId": "1002",
+      "topicTags": [],
+      "codeSnippets": []
+    }
+  }
+}

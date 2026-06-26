@@ -1,0 +1,33 @@
+{
+  "data": {
+    "question": {
+      "title": "Longest Substring Without Repeating Characters",
+      "translatedTitle": "无重复字符的最长子串",
+      "titleSlug": "longest-substring-without-repeating-characters",
+      "content": "",
+      "translatedContent": "<p>给定一个字符串 <code>s</code>，请你找出其中不含有重复字符的最长子串的长度。</p>",
+      "difficulty": "Medium",
+      "questionFrontendId": "3",
+      "sampleTestCase": "\"abcabcbb\"",
+      "topicTags": [
+        {
+          "name": "Hash Table",
+          "slug": "hash-table",
+          "translatedName": "哈希表"
+        },
+        {
+          "name": "String",
+          "slug": "string",
+          "translatedName": "字符串"
+        }
+      ],
+      "codeSnippets": [
+        {
+          "lang": "JavaScript",
+          "langSlug": "javascript",
+          "code": "function lengthOfLongestSubstring(s) {\n  \n}"
+        }
+      ]
+    }
+  }
+}
