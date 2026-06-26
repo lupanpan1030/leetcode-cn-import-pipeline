@@ -1,0 +1,59 @@
+import fs from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+
+import { describe, expect, it } from "vitest";
+
+import { parseCliArgs, runCli } from "../src/cli.js";
+import type { ImportReport, NormalizedProblem } from "../src/domain.js";
+
+describe("cli", () => {
+  it("parses CLI flags", () => {
+    const options = parseCliArgs([
+      "--source",
+      "examples/leetcode-cn",
+      "--out",
+      "tmp/custom",
+      "--limit",
+      "1",
+      "--pretty",
+      "--verbose",
+    ]);
+
+    expect(options).toEqual({
+      sourcePath: "examples/leetcode-cn",
+      outDir: "tmp/custom",
+      limit: 1,
+      pretty: true,
+      verbose: true,
+      help: false,
+    });
+  });
+
+  it("writes problems.json and report.json", async () => {
+    const outDir = await fs.mkdtemp(
+      path.join(os.tmpdir(), "leetcode-import-pipeline-cli-")
+    );
+    const logs: string[] = [];
+
+    const exitCode = await runCli(
+      ["--source", "examples/leetcode-cn", "--out", outDir, "--pretty"],
+      {
+        log: (message) => logs.push(message),
+        error: (message) => logs.push(message),
+      }
+    );
+
+    const problems = JSON.parse(
+      await fs.readFile(path.join(outDir, "problems.json"), "utf8")
+    ) as NormalizedProblem[];
+    const report = JSON.parse(
+      await fs.readFile(path.join(outDir, "report.json"), "utf8")
+    ) as ImportReport;
+
+    expect(exitCode).toBe(0);
+    expect(problems).toHaveLength(2);
+    expect(report.stats.importedCandidates).toBe(2);
+    expect(logs[0]).toBe("Scanned 5 JSON files; imported 2 problems.");
+  });
+});
