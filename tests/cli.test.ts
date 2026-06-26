@@ -17,6 +17,8 @@ describe("cli", () => {
       "--limit",
       "1",
       "--pretty",
+      "--dry-run",
+      "--strict",
       "--verbose",
     ]);
 
@@ -25,6 +27,8 @@ describe("cli", () => {
       outDir: "tmp/custom",
       limit: 1,
       pretty: true,
+      dryRun: true,
+      strict: true,
       verbose: true,
       help: false,
     });
@@ -55,5 +59,40 @@ describe("cli", () => {
     expect(problems).toHaveLength(2);
     expect(report.stats.importedCandidates).toBe(2);
     expect(logs[0]).toBe("Scanned 5 JSON files; imported 2 problems.");
+  });
+
+  it("supports dry-run without writing output files", async () => {
+    const parentDir = await fs.mkdtemp(
+      path.join(os.tmpdir(), "leetcode-import-pipeline-dry-run-")
+    );
+    const outDir = path.join(parentDir, "out");
+    const logs: string[] = [];
+
+    const exitCode = await runCli(
+      ["--source", "examples/leetcode-cn", "--out", outDir, "--dry-run"],
+      {
+        log: (message) => logs.push(message),
+        error: (message) => logs.push(message),
+      }
+    );
+
+    await expect(fs.access(outDir)).rejects.toThrow();
+    expect(exitCode).toBe(0);
+    expect(logs).toContain("Dry run: no files written.");
+  });
+
+  it("returns non-zero in strict mode when files are skipped", async () => {
+    const logs: string[] = [];
+
+    const exitCode = await runCli(
+      ["--source", "examples/leetcode-cn", "--dry-run", "--strict"],
+      {
+        log: (message) => logs.push(message),
+        error: (message) => logs.push(message),
+      }
+    );
+
+    expect(exitCode).toBe(1);
+    expect(logs).toContain("Strict mode failed: 3 file(s) were skipped.");
   });
 });

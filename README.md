@@ -1,5 +1,7 @@
 # LeetCode Import Pipeline
 
+[![CI](https://github.com/lupanpan1030/leetcode-import-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/lupanpan1030/leetcode-import-pipeline/actions/workflows/ci.yml)
+
 Standalone TypeScript pipeline for turning local LeetCode-CN `originData` JSON files into deterministic normalized JSON artifacts.
 
 It has no Prisma, SQLite, Electron, or application-runtime dependency.
@@ -38,6 +40,8 @@ Flags:
 - `--out <dir>`: output directory, default `tmp/leetcode-cn`
 - `--limit <n>`: keep the first `n` normalized problems after sorting
 - `--pretty`: write two-space indented JSON
+- `--dry-run`: parse and report without writing output files
+- `--strict`: return a non-zero exit code when any file is skipped
 - `--verbose`: print selected problems and skipped files
 - `--help`: show usage
 
@@ -56,7 +60,7 @@ Flags:
 
 `report.json` contains deterministic scan counts, skip counts, skipped file details, duplicate details, and output file names.
 
-## Limits
+## Limitations
 
 1. This is specific to LeetCode-CN `originData`-style GraphQL responses.
 2. It only reads public structured fields from local JSON files.

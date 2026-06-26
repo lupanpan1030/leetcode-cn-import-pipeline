@@ -13,6 +13,8 @@ export type CliOptions = {
   outDir: string;
   limit?: number;
   pretty: boolean;
+  dryRun: boolean;
+  strict: boolean;
   verbose: boolean;
   help: boolean;
 };
@@ -25,13 +27,15 @@ type CliIo = {
 export function getUsage(): string {
   return [
     "Usage:",
-    "  npm run import:leetcode-cn -- --source examples/leetcode-cn --out tmp/leetcode-cn [--pretty] [--verbose]",
+    "  npm run import:leetcode-cn -- --source examples/leetcode-cn --out tmp/leetcode-cn [--pretty] [--dry-run] [--strict] [--verbose]",
     "",
     "Options:",
     `  --source <dir>   Directory containing LeetCode-CN JSON files. Default: ${DEFAULT_SOURCE}`,
     `  --out <dir>      Directory for problems.json and report.json. Default: ${DEFAULT_OUT_DIR}`,
     "  --limit <n>      Keep only the first n normalized problems after sorting.",
     "  --pretty         Write two-space indented JSON.",
+    "  --dry-run        Parse and report without writing output files.",
+    "  --strict         Return a non-zero exit code when any file is skipped.",
     "  --verbose        Print selected problems and skipped files.",
     "  --help, -h       Show this message.",
   ].join("\n");
@@ -51,6 +55,8 @@ export function parseCliArgs(argv: string[]): CliOptions {
     sourcePath: DEFAULT_SOURCE,
     outDir: DEFAULT_OUT_DIR,
     pretty: false,
+    dryRun: false,
+    strict: false,
     verbose: false,
     help: false,
   };
@@ -80,6 +86,12 @@ export function parseCliArgs(argv: string[]): CliOptions {
       }
       case "--pretty":
         options.pretty = true;
+        break;
+      case "--dry-run":
+        options.dryRun = true;
+        break;
+      case "--strict":
+        options.strict = true;
         break;
       case "--verbose":
         options.verbose = true;
@@ -127,7 +139,7 @@ async function writeOutput(
 
 function printSummary(
   result: PipelineResult,
-  outputPaths: { problemsPath: string; reportPath: string },
+  outputPaths: { problemsPath: string; reportPath: string } | null,
   options: CliOptions,
   io: CliIo
 ): void {
@@ -138,8 +150,12 @@ function printSummary(
   io.log(
     `Skipped ${stats.skippedInvalidJson} invalid JSON, ${stats.skippedMissingQuestion} missing question, ${stats.skippedMissingContent} missing content.`
   );
-  io.log(`Wrote ${outputPaths.problemsPath}`);
-  io.log(`Wrote ${outputPaths.reportPath}`);
+  if (outputPaths) {
+    io.log(`Wrote ${outputPaths.problemsPath}`);
+    io.log(`Wrote ${outputPaths.reportPath}`);
+  } else {
+    io.log("Dry run: no files written.");
+  }
 
   if (!options.verbose) {
     return;
@@ -178,15 +194,28 @@ export async function runCli(
   const result = await loadLeetCodeCnDirectory(options.sourcePath, {
     limit: options.limit,
   });
-  const outputPaths = await writeOutput(result, options.outDir, options.pretty);
+  const outputPaths = options.dryRun
+    ? null
+    : await writeOutput(result, options.outDir, options.pretty);
   printSummary(result, outputPaths, options, io);
+
+  if (options.strict && result.report.skippedFiles.length > 0) {
+    io.error(
+      `Strict mode failed: ${result.report.skippedFiles.length} file(s) were skipped.`
+    );
+    return 1;
+  }
 
   return 0;
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  runCli(process.argv.slice(2)).catch((error: unknown) => {
-    console.error(`Failed to import LeetCode-CN data: ${formatError(error)}`);
-    process.exitCode = 1;
-  });
+  runCli(process.argv.slice(2))
+    .then((exitCode) => {
+      process.exitCode = exitCode;
+    })
+    .catch((error: unknown) => {
+      console.error(`Failed to import LeetCode-CN data: ${formatError(error)}`);
+      process.exitCode = 1;
+    });
 }
